@@ -23,7 +23,7 @@ List
 - `s` - focus search
 - `Enter` (in search) - submit search
 - `ArrowUp`, `ArrowDown` - Select next, prev task
-- `Enter` - go to task detail
+- `Enter` (when selected) - go to task detail
 
 Add
 
