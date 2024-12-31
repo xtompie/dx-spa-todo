@@ -2,10 +2,13 @@ App.List = (() => {
 
     const Boot = () => {
         App.Router.Register(App.List.Controller, '/list');
-        App.Shortcut.Register(App.List.Controller)
-            .Shortcut('a', GoToAdd, true)
-            .Shortcut('s', FocusSeach, true)
-            .Shortcut('t', GoToTodo)
+        App.Keybind.Register(App.List.Controller)
+            .Combo('a', GoToAdd, true)
+            .Combo('s', FocusSeach, true)
+            .Combo('t', GoToTodo)
+            .Combo('ArrowUp', Up, true)
+            .Combo('ArrowDown', Down, true)
+            .Combo('Enter', Enter)
         ;
     };
 
@@ -48,6 +51,65 @@ App.List = (() => {
             App.Router.Navigate(App.List.Controller, {search: n.value});
         }
     }
+
+    const Enter = () => {
+        const selected = Selected();
+        if (!selected) {
+            return;
+        }
+        App.Router.Navigate(App.Detail.Controller, {id: selected.attr('app-list-task-id')});
+    }
+
+    const Up = () => {
+        NextPrev('prev');
+    }
+
+    const Down = () => {
+        NextPrev('next');
+    }
+
+    const Selected = () => {
+        return App.Window.Content().one('[app-list-task-selected]');
+    }
+
+    const NextPrev = (dir) => {
+        Select(
+            App.Window.Content().all('[app-list-task]'),
+            Selected(),
+            (el) => {
+                el.attr('app-list-task-selected', '');
+                el.style.backgroundColor = '#e5e7eb';
+                el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            },
+            (el) => {
+                el.attr('app-list-task-selected', null);
+                el.style.backgroundColor = '';
+            },
+            dir
+        )
+    }
+
+    const Select = (items, selected, select, unselect, dir) => {
+        if (!items.length) {
+            return;
+        }
+        let index = items.indexOf(selected);
+        if (selected) {
+            unselect(selected);
+        }
+        if (dir === 'next') {
+            if (index < items.length - 1) {
+                index += 1;
+            }
+        } else if (dir === 'prev') {
+            if (index > 0) {
+                index -= 1;
+            }
+        }
+        const next = items[index];
+        select(next);
+    };
+
 
     return {
         Boot,

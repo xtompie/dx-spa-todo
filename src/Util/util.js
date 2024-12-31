@@ -35,6 +35,10 @@ HTMLElement.prototype.arr = function(tpl, data) {
 HTMLElement.prototype.attr = function(a, v) {
     if (v === undefined) {
         return this.getAttribute(a);
+    }
+    else if (v === null) {
+        this.removeAttribute(a);
+        return this;
     } else {
         this.setAttribute(a, v);
         return this;
@@ -94,8 +98,8 @@ HTMLElement.prototype.val = function(data) {
         return this;
     }
 };
-KeyboardEvent.prototype.shortcut = function(shortcut) {
-    return `${this.altKey ? 'Alt+' : ''}${this.ctrlKey ? 'Ctrl+' : ''}${this.metaKey ? 'Meta+' : ''}${this.shiftKey ? 'Shift+' : ''}${this.key}` === shortcut;
+KeyboardEvent.prototype.combo = function(combo) {
+    return `${this.altKey ? 'Alt+' : ''}${this.ctrlKey ? 'Ctrl+' : ''}${this.metaKey ? 'Meta+' : ''}${this.shiftKey ? 'Shift+' : ''}${this.key}` === combo;
 };
 String.prototype.cut = function(length) {
     return this.length > length ? this.substring(0, length) + '...' : this;

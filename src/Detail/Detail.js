@@ -4,10 +4,10 @@ App.Detail = (() => {
 
     const Boot = () => {
         App.Router.Register(App.Detail.Controller, '/detail/{id}');
-        App.Shortcut.Register(App.Detail.Controller).Shortcut('Escape', Exit);
-        App.Shortcut.Register(App.Detail.Controller).Shortcut('Enter', MarkToggle);
-        App.Shortcut.Register(App.Detail.Controller).Shortcut('e', Edit);
-        App.Shortcut.Register(App.Detail.Controller).Shortcut('d', Delete);
+        App.Keybind.Register(App.Detail.Controller).Combo('Escape', Exit);
+        App.Keybind.Register(App.Detail.Controller).Combo('Enter', MarkToggle);
+        App.Keybind.Register(App.Detail.Controller).Combo('e', Edit);
+        App.Keybind.Register(App.Detail.Controller).Combo('d', Delete);
     };
 
     const Controller = (args) => {

@@ -1,25 +1,25 @@
-App.Shortcut = (() => {
+App.Keybind = (() => {
 
-    const shortcuts = new Map();
+    const binds = new Map();
 
     const Register = (controller) => {
-        if (!shortcuts.has(controller)) {
-            shortcuts.set(controller, new Map());
+        if (!binds.has(controller)) {
+            binds.set(controller, new Map());
         }
         const api = {
-            Shortcut: (shortcut, callback, strong = false) => {
-                const actions = shortcuts.get(controller);
-                if (!actions.has(shortcut)) {
-                    actions.set(shortcut, []);
+            Combo: (combo, callback, strong = false) => {
+                const actions = binds.get(controller);
+                if (!actions.has(combo)) {
+                    actions.set(combo, []);
                 }
                 if (strong) {
-                    actions.get(shortcut).push((e) => {
+                    actions.get(combo).push((e) => {
                         e.preventDefault();
                         e.stopPropagation();
                         callback(e);
                     });
                 } else {
-                    actions.get(shortcut).push(callback);
+                    actions.get(combo).push(callback);
                 }
                 return api;
             }
@@ -32,15 +32,15 @@ App.Shortcut = (() => {
             return;
         }
         const controller = App.Router.CurrentController();
-        if (!controller || !shortcuts.has(controller)) {
+        if (!controller || !binds.has(controller)) {
             return;
         }
-        const actions = shortcuts.get(controller);
+        const actions = binds.get(controller);
         if (!actions) {
             return;
         }
-        for (const [shortcut, callbacks] of actions.entries()) {
-            if (e.shortcut && e.shortcut(shortcut)) {
+        for (const [combo, callbacks] of actions.entries()) {
+            if (e.combo(combo)) {
                 callbacks.forEach(callback => callback(e));
             }
         }
@@ -53,7 +53,6 @@ App.Shortcut = (() => {
     return {
         Register,
         Boot,
-        shortcuts,
     };
 
 })();

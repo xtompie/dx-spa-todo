@@ -2,7 +2,7 @@ App.Add = (() => {
 
     const Boot = () => {
         App.Router.Register(App.Add.Controller, '/add');
-        App.Shortcut.Register(App.Add.Controller).Shortcut('Escape', Exit);
+        App.Keybind.Register(App.Add.Controller).Combo('Escape', Exit);
     };
 
     const Controller = () => {
@@ -29,7 +29,7 @@ App.Add = (() => {
     }
 
     const InputKeyDown = (e) => {
-        if (e.shortcut('Meta+Enter') || e.shortcut('Ctrl+Enter')) {
+        if (e.combo('Enter')) {
             e.stopPropagation();
             e.preventDefault();
             Submit();

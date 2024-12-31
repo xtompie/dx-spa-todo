@@ -4,7 +4,7 @@ App.Boot = () => {
     App.Edit.Boot();
     App.Index.Boot();
     App.List.Boot();
-    App.Shortcut.Boot();
+    App.Keybind.Boot();
     App.Window.Boot();
     App.Router.Boot();
 }
