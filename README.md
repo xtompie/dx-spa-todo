@@ -2,6 +2,12 @@
 
 Example TODO app as SAP using [DX](https://github.com/xtompie/dx) and [DX-VAL](https://github.com/xtompie/dx-val)
 
+## Demo
+
+https://xtompie.github.io/dx-spa-todo/ -> Click `TODO 0`
+
+## Description
+
 - Modular
 - No dependecy
 - No npm
