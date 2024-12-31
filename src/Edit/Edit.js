@@ -23,7 +23,7 @@ App.Edit = (() => {
     }
 
     const InputKeyDown = (e) => {
-        if (e.combo('Meta+Enter') || e.combo('Ctrl+Enter')) {
+        if (e.combo('Enter')) {
             e.stopPropagation();
             e.preventDefault();
             Submit();
