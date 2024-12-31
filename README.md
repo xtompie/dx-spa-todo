@@ -19,29 +19,25 @@ Example TODO app as SAP using [DX](https://github.com/xtompie/dx) and [DX-VAL](h
 
 List
 
-`a` - add
-`s` - focus search
-`Enter` (in search) - submit search
-`ArrowUp`, `ArrowDown` - Select next, prev task
-`Enter` - go to task detail
+- `a` - add
+- `s` - focus search
+- `Enter` (in search) - submit search
+- `ArrowUp`, `ArrowDown` - Select next, prev task
+- `Enter` - go to task detail
 
 Add
 
-`Escape` - go to list
-`Enter` (in input) - submit form
+- `Escape` - go to list
+- `Enter` (in input) - submit form
 
- Detail
+Detail
 
-`Escape` - go to list
-`Enter` - togle status: done, todo
-`e` - go to edit
-`d` - go to delete
+- `Escape` - go to list
+- `Enter` - togle status: done, todo
+- `e` - go to edit
+- `d` - go to delete
 
 Edit
 
-`Escape` - go to detail
-`Enter` (in input) - submit form
-
-
-
-
+- `Escape` - go to detail
+- `Enter` (in input) - submit form
