@@ -94,9 +94,17 @@ App.List = (() => {
             return;
         }
         let index = items.indexOf(selected);
+
         if (selected) {
             unselect(selected);
+        } else {
+            if (dir === 'next') {
+                index = -1;
+            } else if (dir === 'prev') {
+                index = items.length;
+            }
         }
+
         if (dir === 'next') {
             if (index < items.length - 1) {
                 index += 1;
@@ -106,10 +114,10 @@ App.List = (() => {
                 index -= 1;
             }
         }
+
         const next = items[index];
         select(next);
     };
-
 
     return {
         Boot,
