@@ -1,7 +1,6 @@
 App.Task = (() => {
 
     let inMemoryStorage = [];
-    const onUpdateListeners = [];
 
     const Status = {
         TODO: 'todo',
@@ -13,13 +12,17 @@ App.Task = (() => {
         },
     }
 
+    const Boot = () => {
+        Todo.Set(Count(Status.TODO));
+    }
+
     const load = () => {
         return [...inMemoryStorage];
     };
 
     const save = (tasks) => {
         inMemoryStorage = [...tasks];
-        onUpdateListeners.forEach(listener => listener(tasks));
+        Todo.Set(Count(Status.TODO));
     };
 
     const Add = (task) => {
@@ -33,16 +36,19 @@ App.Task = (() => {
         return tasks.find(task => task.id === id) || null;
     };
 
-    const FindAll = (status = null) => {
+    const FindAll = (status = null, search = null) => {
         let tasks = load();
         if (status) {
             tasks = tasks.filter(task => task.status === status);
         }
+        if (search) {
+            tasks = tasks.filter(task => task.content.toLowerCase().includes(search.toLowerCase()));
+        }
         return tasks;
     };
 
-    const Count = (status = null) => {
-        return FindAll(status).length;
+    const Count = (status = null, search = null) => {
+        return FindAll(status, search).length;
     };
 
     const Update = (task) => {
@@ -54,10 +60,6 @@ App.Task = (() => {
         tasks[index] = task;
         save(tasks);
     };
-
-    const OnUpdate = (listener) => {
-        onUpdateListeners.push(listener);
-    }
 
     const Validate = (task) => {
         let errors = {};
@@ -77,16 +79,33 @@ App.Task = (() => {
         save(tasks);
     }
 
+    const Todo = (() => {
+        const subscribers = [];
+        let value = undefined;
+        const Subscribe = (subscriber) => {
+            subscribers.push(subscriber);
+            subscriber(value);
+        }
+        const Set = (val) => {
+            value = val;
+            subscribers.forEach(subscriber => subscriber(val));
+        }
+        return {
+            Subscribe,
+            Set,
+        }
+    })();
+
     return {
         Add,
+        Boot,
         Count,
         Delete,
         FindAll,
         FindById,
-        OnUpdate,
         Status,
+        Todo,
         Update,
         Validate,
     };
-
 })();

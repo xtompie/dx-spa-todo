@@ -19,7 +19,8 @@ https://xtompie.github.io/dx-spa-todo/ -> Click `TODO 0`
 - JavaScript code completion
 - Global Registry Pattern, IoC - check Task module
 - Fully accessible via keyboard without the need for a mouse
-- PubSub example in App.Window.Boot
+- PubSub example in App.Window.Boot - App.Router.OnBeforeNavigete
+- Reactivity example in App.Window.Boot - App.Task.Todo.Subscribe(
 
 ## Key binds
 

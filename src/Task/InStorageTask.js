@@ -1,7 +1,6 @@
 App.Task = (() => {
 
     const storageKey = 'App.Task';
-    const onUpdateListeners = [];
 
     const Status = {
         TODO: 'todo',
@@ -13,6 +12,10 @@ App.Task = (() => {
         },
     }
 
+    const Boot = () => {
+        Todo.Set(Count(Status.TODO));
+    }
+
     const load = () => {
         const rawData = localStorage.getItem(storageKey);
         return rawData ? JSON.parse(rawData) : [];
@@ -20,7 +23,7 @@ App.Task = (() => {
 
     const save = (tasks) => {
         localStorage.setItem(storageKey, JSON.stringify(tasks));
-        onUpdateListeners.forEach(listener => listener(tasks));
+        Todo.Set(Count(Status.TODO));
     };
 
     const Add = (task) => {
@@ -59,10 +62,6 @@ App.Task = (() => {
         save(tasks);
     };
 
-    const OnUpdate = (listener) => {
-        onUpdateListeners.push(listener);
-    }
-
     const Validate = (task) => {
         let errors = {};
         if (!task.content || task.content.length < 3) {
@@ -81,14 +80,32 @@ App.Task = (() => {
         save(tasks);
     }
 
+    const Todo = (() => {
+        const subscribers = [];
+        let value = undefined;
+        const Subscribe = (subscriber) => {
+            subscribers.push(subscriber);
+            subscriber(value);
+        }
+        const Set = (val) => {
+            value = val;
+            subscribers.forEach(subscriber => subscriber(val));
+        }
+        return {
+            Subscribe,
+            Set,
+        }
+    })();
+
     return {
         Add,
+        Boot,
         Count,
         Delete,
         FindAll,
         FindById,
-        OnUpdate,
         Status,
+        Todo,
         Update,
         Validate,
     };

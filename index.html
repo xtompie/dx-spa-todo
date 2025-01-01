@@ -109,16 +109,35 @@ App.Add = (() => {
     </div>
 </template>
 <script>
-App.Boot = () => {
-    App.Add.Boot();
-    App.Detail.Boot();
-    App.Edit.Boot();
-    App.Index.Boot();
-    App.List.Boot();
-    App.Keybind.Boot();
-    App.Window.Boot();
-    App.Router.Boot();
-}</script>
+App.Boot = (() => {
+
+    const Boot = () => {
+        Data();
+        Component();
+        Router();
+    }
+
+    const Data = () => {
+        App.Task.Boot();
+    }
+
+    const Component = () => {
+        App.Add.Boot();
+        App.Detail.Boot();
+        App.Edit.Boot();
+        App.Index.Boot();
+        App.List.Boot();
+        App.Keybind.Boot();
+        App.Window.Boot();
+    }
+
+    const Router = () => {
+        App.Router.Boot();
+    }
+
+    return Boot;
+
+})();</script>
 <script>
 App.Detail = (() => {
 
@@ -126,10 +145,12 @@ App.Detail = (() => {
 
     const Boot = () => {
         App.Router.Register(App.Detail.Controller, '/detail/{id}');
-        App.Keybind.Register(App.Detail.Controller).Combo('Escape', Exit);
-        App.Keybind.Register(App.Detail.Controller).Combo('Enter', MarkToggle);
-        App.Keybind.Register(App.Detail.Controller).Combo('e', Edit);
-        App.Keybind.Register(App.Detail.Controller).Combo('d', Delete);
+        App.Keybind.Register(App.Detail.Controller)
+            .Combo('Escape', Exit)
+            .Combo('Enter', MarkToggle)
+            .Combo('e', Edit)
+            .Combo('d', Delete)
+        ;
     };
 
     const Controller = (args) => {
@@ -567,9 +588,17 @@ App.List = (() => {
             return;
         }
         let index = items.indexOf(selected);
+
         if (selected) {
             unselect(selected);
+        } else {
+            if (dir === 'next') {
+                index = -1;
+            } else if (dir === 'prev') {
+                index = items.length;
+            }
         }
+
         if (dir === 'next') {
             if (index < items.length - 1) {
                 index += 1;
@@ -579,10 +608,10 @@ App.List = (() => {
                 index -= 1;
             }
         }
+
         const next = items[index];
         select(next);
     };
-
 
     return {
         Boot,
@@ -767,7 +796,6 @@ App.Router = (() => {
 App.Task = (() => {
 
     const storageKey = 'App.Task';
-    const onUpdateListeners = [];
 
     const Status = {
         TODO: 'todo',
@@ -779,6 +807,10 @@ App.Task = (() => {
         },
     }
 
+    const Boot = () => {
+        Todo.Set(Count(Status.TODO));
+    }
+
     const load = () => {
         const rawData = localStorage.getItem(storageKey);
         return rawData ? JSON.parse(rawData) : [];
@@ -786,7 +818,7 @@ App.Task = (() => {
 
     const save = (tasks) => {
         localStorage.setItem(storageKey, JSON.stringify(tasks));
-        onUpdateListeners.forEach(listener => listener(tasks));
+        Todo.Set(Count(Status.TODO));
     };
 
     const Add = (task) => {
@@ -825,10 +857,6 @@ App.Task = (() => {
         save(tasks);
     };
 
-    const OnUpdate = (listener) => {
-        onUpdateListeners.push(listener);
-    }
-
     const Validate = (task) => {
         let errors = {};
         if (!task.content || task.content.length < 3) {
@@ -847,14 +875,32 @@ App.Task = (() => {
         save(tasks);
     }
 
+    const Todo = (() => {
+        const subscribers = [];
+        let value = undefined;
+        const Subscribe = (subscriber) => {
+            subscribers.push(subscriber);
+            subscriber(value);
+        }
+        const Set = (val) => {
+            value = val;
+            subscribers.forEach(subscriber => subscriber(val));
+        }
+        return {
+            Subscribe,
+            Set,
+        }
+    })();
+
     return {
         Add,
+        Boot,
         Count,
         Delete,
         FindAll,
         FindById,
-        OnUpdate,
         Status,
+        Todo,
         Update,
         Validate,
     };
@@ -1121,15 +1167,12 @@ val.fx.if = {
 App.Window = (() => {
 
     const Boot = () => {
-        App.Task.OnUpdate(UpdateTopbarVal);
+        App.Task.Todo.Subscribe(UpdateTopbarVal);
         App.Router.OnBeforeNavigete(CleanToolbar);
-        UpdateTopbarVal();
     };
 
-    const UpdateTopbarVal = () => {
-        Topbar().val({
-            todo: App.Task.Count(App.Task.Status.TODO),
-        });
+    const UpdateTopbarVal = (todo) => {
+        Topbar().val({todo});
     }
 
     const Title = (title) => {

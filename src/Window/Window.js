@@ -1,15 +1,12 @@
 App.Window = (() => {
 
     const Boot = () => {
-        App.Task.OnUpdate(UpdateTopbarVal);
+        App.Task.Todo.Subscribe(UpdateTopbarVal);
         App.Router.OnBeforeNavigete(CleanToolbar);
-        UpdateTopbarVal();
     };
 
-    const UpdateTopbarVal = () => {
-        Topbar().val({
-            todo: App.Task.Count(App.Task.Status.TODO),
-        });
+    const UpdateTopbarVal = (todo) => {
+        Topbar().val({todo});
     }
 
     const Title = (title) => {
