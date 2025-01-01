@@ -1,6 +1,6 @@
 # DX-SPA-TODO
 
-Example TODO app as SAP using [DX](https://github.com/xtompie/dx) and [DX-VAL](https://github.com/xtompie/dx-val)
+Example TODO app as SPA using [DX](https://github.com/xtompie/dx) and [DX-VAL](https://github.com/xtompie/dx-val)
 
 ## Demo
 
