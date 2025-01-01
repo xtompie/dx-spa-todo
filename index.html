@@ -1042,7 +1042,7 @@ String.prototype.cut = function(length) {
 };
 </script>
 <script>
-var val = (function (val) {
+const val = (function () {
     function _tpl(tpl) {
         return typeof tpl === 'string' ? document.one(tpl) : tpl;
     }
@@ -1117,22 +1117,13 @@ var val = (function (val) {
     function modify(el, callback) {
         set(el, callback(obj(el)));
     }
-    val.fx = val.fx || {};
-    return Object.assign(val, { append, arr, get, modify, obj, patch, prepend, render, set });
-})(val || {});
-var val = val || {};
-val.fx = val.fx || {};
+    return {
+        append, arr, fx: {}, get, modify, obj, patch, prepend, render, set
+    };
+})();
 val.fx.object = {
-    get: (el) => el.attr('val-key')
-        ? { [el.attr('val-key')]: val.obj(el) }
-        : val.obj(el),
-    set: (el, data) => {
-        if (el.attr('val-key')) {
-            val.set(el, data[el.attr('val-key')]);
-        } else {
-            val.set(el, data);
-        }
-    }
+    get: (el) => el.attr('val-key') ? { [el.attr('val-key')]: val.obj(el) } : val.obj(el),
+    set: (el, data) => { el.attr('val-key') ? val.set(el, data[el.attr('val-key')]) : val.set(el, data) }
 };
 val.fx.array = {
     get: (el) => ({ [el.attr('val-key')]: val.arr(el) }),
@@ -1176,17 +1167,10 @@ val.fx.checkbox = {
 };
 val.fx.if = {
     get: (el) => {
-        const valKey = el.attr('val-key');
-        const valValue = el.attr('val-value');
-        return el.style.display !== 'none'
-            ? { [valKey]: valValue ? valValue : true }
-            : {};
+        return el.style.display !== 'none' ? { [el.attr('val-key')]: el.attr('val-value') ? el.attr('val-value') : true } : {};
     },
     set: (el, data) => {
-        const valKey = el.attr('val-key');
-        const valValue = el.attr('val-value');
-        const dataValue = data[valKey];
-        el.style.display = valValue ? (valValue === dataValue ? '' : 'none') : (dataValue ? '' : 'none');
+        el.style.display = el.attr('val-value') ? (el.attr('val-value') === data[el.attr('val-key')] ? '' : 'none') : (data[el.attr('val-key')] ? '' : 'none');
     }
 };</script>
 <script>

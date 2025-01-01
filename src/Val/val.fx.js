@@ -1,16 +1,6 @@
-var val = val || {};
-val.fx = val.fx || {};
 val.fx.object = {
-    get: (el) => el.attr('val-key')
-        ? { [el.attr('val-key')]: val.obj(el) }
-        : val.obj(el),
-    set: (el, data) => {
-        if (el.attr('val-key')) {
-            val.set(el, data[el.attr('val-key')]);
-        } else {
-            val.set(el, data);
-        }
-    }
+    get: (el) => el.attr('val-key') ? { [el.attr('val-key')]: val.obj(el) } : val.obj(el),
+    set: (el, data) => { el.attr('val-key') ? val.set(el, data[el.attr('val-key')]) : val.set(el, data) }
 };
 val.fx.array = {
     get: (el) => ({ [el.attr('val-key')]: val.arr(el) }),
@@ -54,16 +44,9 @@ val.fx.checkbox = {
 };
 val.fx.if = {
     get: (el) => {
-        const valKey = el.attr('val-key');
-        const valValue = el.attr('val-value');
-        return el.style.display !== 'none'
-            ? { [valKey]: valValue ? valValue : true }
-            : {};
+        return el.style.display !== 'none' ? { [el.attr('val-key')]: el.attr('val-value') ? el.attr('val-value') : true } : {};
     },
     set: (el, data) => {
-        const valKey = el.attr('val-key');
-        const valValue = el.attr('val-value');
-        const dataValue = data[valKey];
-        el.style.display = valValue ? (valValue === dataValue ? '' : 'none') : (dataValue ? '' : 'none');
+        el.style.display = el.attr('val-value') ? (el.attr('val-value') === data[el.attr('val-key')] ? '' : 'none') : (data[el.attr('val-key')] ? '' : 'none');
     }
 };

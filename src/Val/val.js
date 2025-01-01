@@ -1,4 +1,4 @@
-var val = (function (val) {
+const val = (function () {
     function _tpl(tpl) {
         return typeof tpl === 'string' ? document.one(tpl) : tpl;
     }
@@ -73,6 +73,7 @@ var val = (function (val) {
     function modify(el, callback) {
         set(el, callback(obj(el)));
     }
-    val.fx = val.fx || {};
-    return Object.assign(val, { append, arr, get, modify, obj, patch, prepend, render, set });
-})(val || {});
+    return {
+        append, arr, fx: {}, get, modify, obj, patch, prepend, render, set
+    };
+})();
