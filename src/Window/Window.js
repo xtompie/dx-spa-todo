@@ -1,7 +1,7 @@
 App.Window = (() => {
 
     const Boot = () => {
-        App.Task.Todo.Subscribe(UpdateTopbarVal);
+        App.Task.Todo.subscribe(UpdateTopbarVal);
         App.Router.OnBeforeNavigete(CleanToolbar);
     };
 

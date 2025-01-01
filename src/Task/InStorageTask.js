@@ -10,11 +10,9 @@ App.Task = (() => {
             'todo': 'Todo',
             'done': 'Done',
         },
-    }
+    };
 
-    const Boot = () => {
-        Todo.Set(Count(Status.TODO));
-    }
+    const Todo = Rv.lazy(() => Count(Status.TODO));
 
     const load = () => {
         const rawData = localStorage.getItem(storageKey);
@@ -23,7 +21,7 @@ App.Task = (() => {
 
     const save = (tasks) => {
         localStorage.setItem(storageKey, JSON.stringify(tasks));
-        Todo.Set(Count(Status.TODO));
+        Todo.set(Count(Status.TODO));
     };
 
     const Add = (task) => {
@@ -68,7 +66,7 @@ App.Task = (() => {
             errors.content = 'Content must be at least 3 characters';
         }
         return Object.keys(errors).length > 0 ? errors : null;
-    }
+    };
 
     const Delete = (id) => {
         const tasks = load();
@@ -78,28 +76,10 @@ App.Task = (() => {
         }
         tasks.splice(index, 1);
         save(tasks);
-    }
-
-    const Todo = (() => {
-        const subscribers = [];
-        let value = undefined;
-        const Subscribe = (subscriber) => {
-            subscribers.push(subscriber);
-            subscriber(value);
-        }
-        const Set = (val) => {
-            value = val;
-            subscribers.forEach(subscriber => subscriber(val));
-        }
-        return {
-            Subscribe,
-            Set,
-        }
-    })();
+    };
 
     return {
         Add,
-        Boot,
         Count,
         Delete,
         FindAll,
@@ -109,5 +89,4 @@ App.Task = (() => {
         Update,
         Validate,
     };
-
 })();

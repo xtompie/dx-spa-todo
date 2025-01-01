@@ -1,16 +1,11 @@
 App.Boot = (() => {
 
     const Boot = () => {
-        Data();
-        Component();
+        Modules();
         Router();
     }
 
-    const Data = () => {
-        App.Task.Boot();
-    }
-
-    const Component = () => {
+    const Modules = () => {
         App.Add.Boot();
         App.Detail.Boot();
         App.Edit.Boot();
